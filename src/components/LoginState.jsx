@@ -1,12 +1,27 @@
-import { useRef } from "react";
+import { useState } from "react";
 
 export default function Login() {
-  const email = useRef();
-  const password = useRef();
+  // const [newEmail, setnewEmail] = useState("");
+  // const [newPassword, setnewPassword] = useState("");
+
+  const initialValues = { email: "", password: "" };
+  const [values, setValues] = useState(initialValues);
+
+  const emailIsValid = values.email !== "" && !values.email.includes("@");
+  const passwordIsValid = values.password !== "" && values.password.length <= 5;
 
   function handleSubmit(e) {
     e.preventDefault();
     console.log("submit");
+  }
+
+  function handleInputChange(e) {
+    const name = e.target.name;
+    const value = e.target.value;
+    setValues({
+      ...values,
+      [name]: value,
+    });
   }
 
   return (
@@ -24,8 +39,12 @@ export default function Login() {
           className="form-control"
           id="email"
           name="email"
-          ref={email}
+          value={values.email}
+          onChange={handleInputChange}
         />
+        {emailIsValid && (
+          <div className="invalid-feedback d-block">Enter Valid Email</div>
+        )}
       </div>
       <div className="mb-4">
         <label htmlFor="password" className="form-label">
@@ -36,8 +55,14 @@ export default function Login() {
           className="form-control"
           id="password"
           name="password"
-          ref={password}
+          value={values.password}
+          onChange={handleInputChange}
         />
+        {passwordIsValid && (
+          <div className="invalid-feedback d-block">
+            Password must be at least 5 character.
+          </div>
+        )}
       </div>
       <div className="mb-3">
         <button className="btn btn-outline-warning me-2">Submit</button>
