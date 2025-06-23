@@ -6,9 +6,22 @@ export default function Login() {
 
   const initialValues = { email: "", password: "" };
   const [values, setValues] = useState(initialValues);
+  const [isEdited, setIsEdited] = useState({ email: false, password: false });
 
-  const emailIsValid = values.email !== "" && !values.email.includes("@");
-  const passwordIsValid = values.password !== "" && values.password.length <= 5;
+  // const emailIsValid = values.email !== "" && !values.email.includes("@");
+  // const passwordIsValid = values.password !== "" && values.password.length <= 5; validation on keyPress
+
+  const emailIsValid = isEdited.email && !values.email.includes("@");
+  const passwordIsValid = isEdited.password && values.password.length <= 5;
+
+  function handleInputBlur(e) {
+    const name = e.target.name;
+
+    setIsEdited((prev) => ({
+      ...prev,
+      [name]: true,
+    }));
+  }
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -22,6 +35,11 @@ export default function Login() {
       ...values,
       [name]: value,
     });
+
+    setIsEdited((prev) => ({
+      ...prev,
+      [name]: false,
+    }));
   }
 
   return (
@@ -39,6 +57,7 @@ export default function Login() {
           className="form-control"
           id="email"
           name="email"
+          onBlur={handleInputBlur}
           value={values.email}
           onChange={handleInputChange}
         />
@@ -55,6 +74,7 @@ export default function Login() {
           className="form-control"
           id="password"
           name="password"
+          onBlur={handleInputBlur}
           value={values.password}
           onChange={handleInputChange}
         />
