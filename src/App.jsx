@@ -5,7 +5,7 @@ import Login from "./components/Login";
 function App() {
   return (
     <div className="container my-4">
-      <Login />
+      <Register />
     </div>
   );
 }
