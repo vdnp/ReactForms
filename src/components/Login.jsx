@@ -1,12 +1,40 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 export default function Login() {
+  const [emailError, setEmailError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
+
   const email = useRef();
   const password = useRef();
 
   function handleSubmit(e) {
     e.preventDefault();
+
+    setEmailError(false);
+    setPasswordError(false);
+
+    const emailValue = email.current.value;
+    const passwordValue = password.current.value;
+
+    const emailIsValid = !emailValue.includes("@");
+    const passwordIsValid = passwordValue.length <= 5;
+
+    if (emailIsValid) {
+      setEmailError(true);
+      return;
+    }
+
+    if (passwordIsValid) {
+      setPasswordError(true);
+      return;
+    }
+
     console.log("submit");
+    setEmailError(false);
+    setPasswordError(false);
+
+    email.current.value = "";
+    password.current.value = "";
   }
 
   return (
@@ -26,6 +54,9 @@ export default function Login() {
           name="email"
           ref={email}
         />
+        {emailError && (
+          <div className="invalid-feedback d-block">Enter Valid Email</div>
+        )}
       </div>
       <div className="mb-4">
         <label htmlFor="password" className="form-label">
@@ -38,6 +69,11 @@ export default function Login() {
           name="password"
           ref={password}
         />
+        {passwordError && (
+          <div className="invalid-feedback d-block">
+            Password must be at least 5 character.
+          </div>
+        )}
       </div>
       <div className="mb-3">
         <button className="btn btn-outline-warning me-2">Submit</button>
